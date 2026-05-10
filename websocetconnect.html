@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><title>WS Test</title></head>
+<body>
+<h1>WebSocket Test</h1>
+<div id="logs" style="background: #000; color: #0f0; padding: 10px; font-family: monospace;"></div>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080/api/ws');
+    const logsDiv = document.getElementById('logs');
+
+    ws.onopen = () => logsDiv.innerHTML += '<p>✅ Connected</p>';
+    ws.onmessage = (event) => {
+        const log = JSON.parse(event.data);
+        logsDiv.innerHTML += `<p>[${log.logLevel}] ${log.serviceName}: ${log.message}</p>`;
+    };
+    ws.onerror = (error) => logsDiv.innerHTML += `<p>❌ Error: ${error}</p>`;
+    ws.onclose = () => logsDiv.innerHTML += '<p>🔌 Disconnected</p>';
+</script>
+</body>
+</html>
