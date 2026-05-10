@@ -30,7 +30,14 @@ func IngestLogsHandler(
 				"error": "invalid body",
 			})
 		}
-
+		hub.Mutex.RLock()
+		if hub.IsShuttingDown {
+			hub.Mutex.RUnlock()
+			return c.JSON(http.StatusServiceUnavailable, map[string]string{
+				"error": "server is shutting down",
+			})
+		}
+		hub.Mutex.RUnlock()
 		err, errorsMap := validators.ValidateInputLog(log)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, errorsMap)
@@ -41,9 +48,8 @@ func IngestLogsHandler(
 
 		rdb.LPush(ctx, "logs:recent", logJSON)
 		rdb.LTrim(ctx, "logs:recent", 0, 999)
-
+		hub.PendingLogs.Add(1)
 		hub.Broadcast <- log
-
 		return c.JSON(http.StatusOK, map[string]string{
 			"message": "log accepted",
 		})

@@ -8,13 +8,10 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"sync"
 	"time"
 )
 
-func GenerateLogs(wg *sync.WaitGroup) {
-	wg.Add(1)
-	defer wg.Done()
+func GenerateLogs() {
 	time.Sleep(2 * time.Second)
 	services := []string{
 		"user-service",
