@@ -44,6 +44,7 @@ func main() {
 	api.GET("/health", handlers.HealthHandler)
 	api.POST("/logs", handlers.IngestLogsHandler(rdb, hub))
 	api.GET("/logs/recent", handlers.RecentLogsHandler(rdb))
+	api.GET("/logs/search", handlers.SearchLogsHandler(rdb))
 	api.GET("/ws", handlers.WebsocketHandler(hub))
 
 	go seeders.GenerateLogs()

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func ValidateInputLog(req models.LogInputRequest) (error, map[string]string) {
+func ValidateInputLog(req models.LogRequest) (error, map[string]string) {
 	errors := make(map[string]string)
 
 	if strings.TrimSpace(req.ServiceName) == "" {

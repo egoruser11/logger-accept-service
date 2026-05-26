@@ -14,7 +14,7 @@ type Hub struct {
 	Register       chan *websocket.Conn
 	Unregister     chan *websocket.Conn
 	PendingLogs    sync.WaitGroup
-	Broadcast      chan models.LogInputRequest
+	Broadcast      chan models.LogRequest
 	IsShuttingDown bool
 	Mutex          sync.RWMutex
 }
@@ -24,7 +24,7 @@ func NewHub() *Hub {
 		Clients:    make(map[*websocket.Conn]bool),
 		Register:   make(chan *websocket.Conn),
 		Unregister: make(chan *websocket.Conn),
-		Broadcast:  make(chan models.LogInputRequest, 100),
+		Broadcast:  make(chan models.LogRequest, 100),
 	}
 }
 
@@ -61,7 +61,7 @@ func (h *Hub) Run() {
 	}
 }
 
-func (h *Hub) broadcast(log models.LogInputRequest) {
+func (h *Hub) broadcast(log models.LogRequest) {
 
 	h.Mutex.RLock()
 	clients := make([]*websocket.Conn, 0, len(h.Clients))

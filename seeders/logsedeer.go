@@ -44,7 +44,7 @@ func GenerateLogs() {
 	log.Println("🚀 Starting log generation: 200 logs with 0.5s interval")
 
 	for i := 1; i <= 200; i++ {
-		logEntry := models.LogInputRequest{
+		logEntry := models.LogRequest{
 			ServiceName: services[rand.Intn(len(services))],
 			LogLevel:    logLevels[rand.Intn(len(logLevels))],
 			Message:     messages[rand.Intn(len(messages))],
@@ -72,7 +72,7 @@ func GenerateLogs() {
 	log.Println("✅ Log generation completed: 200 logs sent")
 }
 
-func sendLog(logEntry models.LogInputRequest) error {
+func sendLog(logEntry models.LogRequest) error {
 	url := "http://localhost:8080/api/logs"
 
 	data, err := json.Marshal(logEntry)
